@@ -20,11 +20,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis(Utils.Input.Horizontal);
         Vector2 movement = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
 
         rb.velocity = movement;        
 
+        if (Input.GetButtonDown(Utils.Input.Attack))
+        {
+            WeaponScript weapon = GetComponent<WeaponScript>();
+            if (weapon != null && weapon.CanAttack)
+            {
+                weapon.Shoot(false);
+            }
+        }
         // if (horizontalInput > 0 && !isFacingRight)
         // {
         //     Flip();
@@ -34,7 +42,7 @@ public class PlayerController : MonoBehaviour
         //     Flip();
         // }
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if (Input.GetButtonDown(Utils.Input.Jump) && IsGrounded())
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
